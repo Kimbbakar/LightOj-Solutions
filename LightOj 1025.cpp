@@ -1,55 +1,34 @@
-// Problem name : 1025 - The Specials Menu
-// Algorithm :
-// Contest/Practice :
-// Source :
-// Comment : Whenever you start to believe  yourself, people also start to believe in you
-// Date :
+  
 
-#include <vector>
-#include <list>
-#include <map>
-#include <set>
-#include <queue>
-#include <string>
-#include <deque>
-#include <stack>
-#include <bitset>
-#include <algorithm>
-#include <functional>
-#include <numeric>
-#include <utility>
-#include <sstream>
-#include <iostream>
-#include <iomanip>
-#include <cstdio>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-#include<assert.h>
+#include<bits/stdc++.h>
 
-
-#define pause system("pause")
-#define FOR(s,e,inc) for(int i=s;i<=e;i+=inc)
-#define mod 1000000007
-#define inf 1<<30
-#define pb push_back
-#define ppb pop_back
-#define mp make_pair
-#define F first
-#define S second
-#define sz(x) ((int)x.size())
-#define sqr(x) ( (x)* (x) )
-#define eps 1e-9
-#define gcd(x,y) __gcd(x,y)
-#define on(x,w)  x=x|(1<<w)
-#define check(x,w) (x&(1<<w))==(1<<w)?true:false
-#define all(x) (x).begin(),(x).end()
-#define pf printf
-#define AND &&
-#define OR ||
+#define pause           system("pause");
+#define FOR(s,e,inc)    for(int i=s;i<=e;i+=inc)
+#define mod             1000000007
+#define UNIQUE(V) (V).erase(unique((V).begin(),(V).end()),(V).end())//vector must be sorted
+#define inf             1<<30
+#define pb              push_back
+#define ppb             pop_back
+#define mp              make_pair
+#define F               first
+#define S               second
+#define sz(x)           ((int)x.size())
+#define sqr(x)          ( (x)* (x) )
+#define eps             1e-9
+#define lcm(x,y)        (abs(x) /gcd(x,y))* abs(y)
+#define on(x,w)         x|(1<<w)
+#define check(x,w)      (x&(1<<w))
+#define all(x)          (x).begin(),(x).end()
+#define pf              printf
+#define sf              scanf
+#define pi              acos(-1.0)
+#define reset(x,v)      memset(x,v,sizeof(x));
+#define AND             &&
+#define OR              ||
+#define what_is(x)      cerr<<#x<<" is "<<x<<"\n";
 
 typedef long long ll;
-typedef unsigned long long ull;
+typedef unsigned long long llu;
 
 using namespace std;
 
@@ -62,22 +41,15 @@ inline T mod_v(T num)
     else
         return (num%mod+mod)%mod;
 }
-
 template<class T>
-inline void memset1(vector<T>&v,int s,T value)
+inline T gcd(T a,T b)
 {
-    for(int i=0;i<s;i++)
-        v[i]=value;
-}
+    a=abs(a);
+    b=abs(b);
 
-template<class T>
-inline void memset2(vector<vector<T> >&v,int s1,int s2,T value)
-{
-    for(int i=0;i<s1;i++)
-        for(int j=0;j<s2;j++)
-            v[i][j]=value;
+    while(b) b ^= a ^= b ^= a %= b;
+    return a;
 }
-
 
 template<class T>
 T fast_pow(T n , T p)
@@ -101,68 +73,104 @@ inline T modInverse(T n)
 {
     return fast_pow(n,mod-2);
 }
+ 
+
+bool equalTo ( double a, double b ){ if ( fabs ( a - b ) <= eps ) return true; else return false; }
+bool notEqual ( double a, double b ){if ( fabs ( a - b ) > eps ) return true; else return false; }
+bool lessThan ( double a, double b ){ if ( a + eps < b ) return true; else return false; }
+bool lessThanEqual ( double a, double b ){if ( a < b + eps ) return true;   else return false;}
+bool greaterThan ( double a, double b ){if ( a > b + eps ) return true;else return false;}
+bool greaterThanEqual ( double a, double b ){if ( a + eps > b ) return true;else return false;}
+
+#define debug(args...) {dbg,args; cerr<<endl;}
+
+struct debugger{
+    template<typename T> debugger& operator , (const T& v){
+        cerr<<v<<" ";
+        return *this;
+    }
+}dbg;
+
+int nextInt() { int n; scanf("%d", &n); return n; }
+long long nextLong() { long long n; scanf("%lld", &n); return n; }
+void print(int n){ printf("%d", n); }
+void println(int n){ printf("%d\n", n); }
+void println(long long n){ printf("%lld\n", n); }
+
+
 
 template<class T>
-inline void debug(string S1,T S2,string S3)
+inline int in(register T& num)
 {
-    cout<<S1<<S2<<S3;
+    register char c=0;
+    num=0;
+    bool n=false;
+    while(c<33)c=getchar();
+    while(c>33){
+        if(c=='-')
+            n=true;
+        else num=num*10+c-'0';
+        c=getchar();
+    }
+    num=n?-num:num;
+    return 1;
 }
 
-#ifndef ONLINE_JUDGE
-#  define p(x) cout<<x<<endl;
-#else if
-#  define print(x) 0;
-#endif
+/******* ! Code start from here ! *******/
 
-//.......Code start from here ! .......
-
-ll dp[65][65];
-
+ll dp[62][62][2][2][2] ;
 string s;
 
-void clr()
-{
-    for(int i=0;i<sz(s);i++)
-        for(int j=0;j<sz(s);j++)
-            dp[i][j]=-1;
-}
+ll re(int i,int j,int ok,int f1,int f2){
+    if(i>j) return ok;
+    if(i==j){
+        if(ok) return 1 + ((f1 or f2)==1?0:1) ;
+        else return 1;
+    } 
 
-ll re(int i,int j,ll cost)
-{
-    if(i>j) return 0;
-    if(dp[i][j]!=-1) return dp[i][j];
+    ll &res = dp[i][j][ok][f1][f2] ;
 
-    ll r=0;
+    if(res!=-1) return res;
+     
+    res = 0;
 
-    if(s[i]==s[j])
-    {
-        r+=1;
-        r+=re(i+1,j,cost);
-        r+=re(i,j-1,cost);
-    }
-    else
-    {
-        r+=re(i+1,j,cost);
-        r+=re(i,j-1,cost);
-       r-=re(i+1,j-1,cost);
-    }
-    return dp[i][j]=r ;
+    if(s[i]==s[j]) 
+        res+=re(i+1,j-1,1,0,0);
+    if(!f1)
+        res+=re(i+1,j,ok,0,1);
+    if(!f2)
+        res+=re(i,j-1,ok,1,0);
+    if(!f1 and !f2)
+        res+=re(i+1,j-1,ok,0,0);         
+
+    return res;
 }
 
 
 int main()
 {
+//     std::ios_base::sync_with_stdio(false);
+
+    #ifdef kimbbakar
+        freopen ( "E:/Code/in.txt", "r", stdin );
+//        freopen ( "E:/Code/out.txt", "w", stdout );
+    #endif
+
     int t,tcase=1;
 
-    scanf("%d",&t);
-    while(t--)
-    {
+    in(t);
+
+    while(t--){
         cin>>s;
 
-        clr();
+        reset(dp,-1);  
 
-        printf("Case %d: %lld\n",tcase++,re(0,sz(s)-1,0));
+        pf("Case %d: %lld\n",tcase++,re(0,sz(s)-1,0,0,0 ) );
     }
+
+
     return 0;
 }
+
+
 
