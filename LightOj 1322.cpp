@@ -178,11 +178,7 @@ void preCal(){
     }
 }
 
-
-bool cmp(pair<int,int>a,pair<int,int>b){
-    return a.S<b.S;
-}
-
+ 
 int main()
 {
 //     std::ios_base::sync_with_stdio(false);
@@ -207,11 +203,7 @@ int main()
 
     for(int i=1;i<=t;i++)
         pf("Case %d: %s\n",tcase++,res[i] );
-
-
-
-
-
+ 
     return 0;
 }
  
